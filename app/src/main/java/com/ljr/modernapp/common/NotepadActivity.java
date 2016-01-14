@@ -107,6 +107,7 @@ public class NotepadActivity extends AppCompatActivity {
 
 
         onTouchDrawer(Constants.NOTEPAD);
+        // ready to continue
     }
 
     @Override
