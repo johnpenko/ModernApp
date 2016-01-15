@@ -1,10 +1,14 @@
 package com.ljr.modernapp.common;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -30,13 +34,20 @@ public class NotepadActivity extends AppCompatActivity {
     private Drawer mDrawer = null;
     private Toolbar mToolbar;
     private Activity mActivity;
-
+    private int DEFAULT_APP;
+    private SharedPreferences mSharedPreference;
+    private SharedPreferences.Editor mEditor;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notepad);
         mActivity = this;
+
+        mSharedPreference = mActivity.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        mEditor = mSharedPreference.edit();
+        DEFAULT_APP = mSharedPreference.getInt(Constants.DEFAULT_APP, 0);
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -64,7 +75,7 @@ public class NotepadActivity extends AppCompatActivity {
                 .withToolbar(mToolbar)
                 .withActionBarDrawerToggle(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.lebel_notepad).withIcon(FontAwesome.Icon.faw_edit).withIdentifier(Constants.NOTEPAD),
+                        new PrimaryDrawerItem().withName(R.string.label_notepad).withIcon(FontAwesome.Icon.faw_edit).withIdentifier(Constants.NOTEPAD),
                         new PrimaryDrawerItem().withName(R.string.label_todo_list).withIcon(FontAwesome.Icon.faw_list).withIdentifier(Constants.TODO),
                         new PrimaryDrawerItem().withName(R.string.label_drawing).withIcon(FontAwesome.Icon.faw_paint_brush).withIdentifier(Constants.DRAWING),
                         new PrimaryDrawerItem().withName(R.string.label_reminder).withIcon(FontAwesome.Icon.faw_clock_o).withIdentifier(Constants.REMINDER),
@@ -106,8 +117,11 @@ public class NotepadActivity extends AppCompatActivity {
                 .build();
 
 
-        onTouchDrawer(Constants.NOTEPAD);
-        // ready to continue
+        if (DEFAULT_APP > 0) {
+            onTouchDrawer(DEFAULT_APP);
+        } else {
+            onTouchDrawer(Constants.NOTEPAD);
+        }
     }
 
     @Override
@@ -152,9 +166,24 @@ public class NotepadActivity extends AppCompatActivity {
                 break;
             case Constants.SETTINGS:
                 //go to settings
-                //to be decided
+                openFragment(new SettingsFragment(), "Settings");
                 break;
 
+        }
+    }
+
+    private void openFragment(Fragment fragment, String screenTitle) {
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
+        try {
+            getSupportActionBar().setTitle(screenTitle);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

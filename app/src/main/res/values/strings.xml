@@ -8,11 +8,12 @@
     <string name="title_activity_todo">TodoActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="lebel_notepad">Notepad</string>
+    <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
+    <string name="label_notepad">Notepad</string>
     <string name="label_todo_list">Todo List</string>
     <string name="label_drawing">Drawing</string>
     <string name="label_reminder">Reminder</string>
     <string name="label_movie_list">Movie List</string>
     <string name="label_setting">Settings</string>
+    <string name="label_choose_default_app">Choose Default App</string>
 </resources>

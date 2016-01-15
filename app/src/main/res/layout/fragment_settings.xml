@@ -1,0 +1,64 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ljr.modernapp.common.SettingsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/label_choose_default_app"
+        android:layout_gravity="center_horizontal|top"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:layout_gravity="center_horizontal">
+        <RadioButton
+            android:id="@+id/radioButtonNotepad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_notepad"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonTodoList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_todo_list"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonDrawing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_drawing"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_reminder"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonMovieList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_movie_list"/>
+
+
+
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal|top" />
+
+</FrameLayout>
