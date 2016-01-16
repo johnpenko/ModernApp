@@ -1,7 +1,7 @@
 package com.ljr.modernapp.common;
 
 /**
- * Created by ljr124 on 1/13/16.
+ * LittleJohnsRealm Created by ljr124 on 1/13/16.
  */
 public class Constants {
     public final static int NOTEPAD = 1;

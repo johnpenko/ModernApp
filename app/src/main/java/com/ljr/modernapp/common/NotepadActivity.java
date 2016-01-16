@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.ljr.modernapp.R;
 import com.ljr.modernapp.drawingapp.DrawingActivity;
@@ -37,6 +42,13 @@ public class NotepadActivity extends AppCompatActivity {
     private int DEFAULT_APP;
     private SharedPreferences mSharedPreference;
     private SharedPreferences.Editor mEditor;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    private Object activity;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +134,9 @@ public class NotepadActivity extends AppCompatActivity {
         } else {
             onTouchDrawer(Constants.NOTEPAD);
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -172,7 +187,7 @@ public class NotepadActivity extends AppCompatActivity {
         }
     }
 
-    private void openFragment(Fragment fragment, String screenTitle) {
+    private void openFragment(SettingsFragment fragment, String screenTitle) {
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -180,10 +195,55 @@ public class NotepadActivity extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .addToBackStack(null)
                 .commit();
-        try {
-            getSupportActionBar().setTitle(screenTitle);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        // commented this out due to verification warning when commiting to GIT
+//        String scrTitle;
+//        scrTitle = screenTitle;
+
+//        if (scrTitle != null) {
+//            getSupportActionBar().setTitle(scrTitle);
+//        }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Notepad Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.ljr.modernapp.common/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Notepad Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.ljr.modernapp.common/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+
 }
