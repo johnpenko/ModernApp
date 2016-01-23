@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.ljr.modernapp.R;
 import com.ljr.modernapp.drawingapp.DrawingActivity;
+import com.ljr.modernapp.models.Note;
 import com.ljr.modernapp.movieapp.MovieActivity;
 import com.ljr.modernapp.reminderapp.ReminderActivity;
 import com.ljr.modernapp.todoapp.TodoActivity;
@@ -33,6 +33,9 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class NotepadActivity extends AppCompatActivity {
 
@@ -55,6 +58,9 @@ public class NotepadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notepad);
         mActivity = this;
+
+        //testDatabase();
+
 
         mSharedPreference = mActivity.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         mEditor = mSharedPreference.edit();
@@ -80,6 +86,7 @@ public class NotepadActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.header1)
                 .build();
 
+
         // Now Build the Navigation drawer and pass in the AccountHeader above
         mDrawer = new DrawerBuilder()
                 .withAccountHeader(headResult)
@@ -87,12 +94,12 @@ public class NotepadActivity extends AppCompatActivity {
                 .withToolbar(mToolbar)
                 .withActionBarDrawerToggle(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.label_notepad).withIcon(FontAwesome.Icon.faw_edit).withIdentifier(Constants.NOTEPAD),
-                        new PrimaryDrawerItem().withName(R.string.label_todo_list).withIcon(FontAwesome.Icon.faw_list).withIdentifier(Constants.TODO),
-                        new PrimaryDrawerItem().withName(R.string.label_drawing).withIcon(FontAwesome.Icon.faw_paint_brush).withIdentifier(Constants.DRAWING),
-                        new PrimaryDrawerItem().withName(R.string.label_reminder).withIcon(FontAwesome.Icon.faw_clock_o).withIdentifier(Constants.REMINDER),
-                        new PrimaryDrawerItem().withName(R.string.label_movie_list).withIcon(FontAwesome.Icon.faw_file_movie_o).withIdentifier(Constants.MOVIE),
-                        new PrimaryDrawerItem().withName(R.string.label_setting).withIcon(FontAwesome.Icon.faw_cog).withIdentifier(Constants.SETTINGS)
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_NOTEPAD).withIcon(FontAwesome.Icon.faw_edit).withIdentifier(Constants.NOTEPAD),
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_TODO).withIcon(FontAwesome.Icon.faw_list).withIdentifier(Constants.TODO),
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_DRAWING).withIcon(FontAwesome.Icon.faw_paint_brush).withIdentifier(Constants.DRAWING),
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_REMINDER).withIcon(FontAwesome.Icon.faw_clock_o).withIdentifier(Constants.REMINDER),
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_MOVIE).withIcon(FontAwesome.Icon.faw_file_movie_o).withIdentifier(Constants.MOVIE),
+                        new PrimaryDrawerItem().withName(Constants.BAR_LABEL_SETTINGS).withIcon(FontAwesome.Icon.faw_cog).withIdentifier(Constants.SETTINGS)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -196,54 +203,20 @@ public class NotepadActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
 
-        // commented this out due to verification warning when commiting to GIT
-//        String scrTitle;
-//        scrTitle = screenTitle;
-
-//        if (scrTitle != null) {
-//            getSupportActionBar().setTitle(scrTitle);
-//        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Notepad Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.ljr.modernapp.common/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Notepad Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.ljr.modernapp.common/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+        getSupportActionBar().setTitle(screenTitle);
     }
 
 
+    private void testDatabase() {
+        Note note1 = new Note();
+        note1.setTitle("This is a test for database");
+        note1.setContent("This is testing testing testing");
+        Calendar calendar = GregorianCalendar.getInstance();
+        note1.setDateCreated(calendar.getTimeInMillis());
+        note1.setDateModified(calendar.getTimeInMillis());
+        note1.save();
+        Long id = note1.getId();
+Long id2 = note1.getId();
+
+    }
 }
